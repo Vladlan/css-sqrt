@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+
+  <body>
+    <style>
+      :root {
+        --main-bg-color: red;
+        --x: 80;
+        --main-width: var(--x);
+        --z1: 1;
+        --z2: calc(
+          var(--z1) - (var(--z1) * var(--z1) - var(--x)) / (2 * var(--z1))
+        );
+        --z3: calc(
+          var(--z2) - (var(--z2) * var(--z2) - var(--x)) / (2 * var(--z2))
+        );
+        --z4: calc(
+          var(--z3) - (var(--z3) * var(--z3) - var(--x)) / (2 * var(--z3))
+        );
+        --z5: calc(
+          var(--z4) - (var(--z4) * var(--z4) - var(--x)) / (2 * var(--z4))
+        );
+      }
+      * {
+        margin: 0 auto;
+        font-family: Helvetica;
+        box-sizing: border-box;
+      }
+      html {
+        background-color: #e9e9e9;
+      }
+
+      div.main {
+        background-color: var(--main-bg-color);
+        width: calc(var(--main-width) * 1%);
+        height: auto;
+        border: 1px solid var(--main-bg-color);
+      }
+
+      p {
+        border: 1px solid green;
+        margin: 2px auto;
+        width: calc(var(--z5) * 1%);
+        text-align: center;
+      }
+
+      .controls {
+        width: 100%;
+        height: 100px;
+        background-color: #e9e9e9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+
+      /* prepare wrapper element */
+      div.num-inp-wrapper {
+        display: inline-block;
+        position: relative;
+      }
+
+      /* position the unit to the right of the wrapper */
+      div.num-inp-wrapper::after {
+        position: absolute;
+        top: 2px;
+        right: 0.4em;
+        transition: all 0.05s ease-in-out;
+      }
+
+      #widthControl {
+        width: 5rem;
+        padding-right: 1.5em;
+      }
+
+      .percent::after {
+        content: '%';
+      }
+    </style>
+    <div class="main">
+      <p>p</p>
+    </div>
+    <div class="controls">
+      <form>
+        <div class="num-inp-wrapper percent">
+          <input id="widthControl" type="number" name="value" />
+        </div>
+
+        <button id="acceptWidthBtn">change width</button>
+      </form>
+    </div>
+  </body>
+  <script>
+    const r = document.querySelector('style')
+
+    function getCurrentWidthValue() {
+      const width = getComputedStyle(document.documentElement).getPropertyValue(
+        '--x',
+      )
+      return Number.parseInt(width, 10)
+    }
+
+    function setInitialInputValue() {
+      const widthControl = document.getElementById('widthControl')
+      const width = getCurrentWidthValue()
+      widthControl.value = width
+    }
+
+    function changeWidthCssVar(value) {
+      document.documentElement.style.setProperty('--x', value)
+    }
+
+    const widthControl = document.getElementById('widthControl')
+    const acceptWidthBtn = document.getElementById('acceptWidthBtn')
+    const main = document.querySelector('.main')
+    const p = document.querySelector('p')
+
+    acceptWidthBtn.addEventListener('click', (e) => {
+      e.preventDefault()
+      const width = widthControl.value
+      changeWidthCssVar(width)
+    })
+
+    window.onload = () => {
+      setInitialInputValue()
+    }
+  </script>
+</html>
